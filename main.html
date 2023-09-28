@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Receiver App</title>
+    <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+</head>
+<body>
+    <cast-media-player id="player"></cast-media-player>
+    <div id="popup" style="display: none;">This is a pop-up</div>
+
+    <script>
+        const context = cast.framework.CastReceiverContext.getInstance();
+        const playerManager = context.getPlayerManager();
+
+        // Handle messages from the sender app
+        context.addCustomMessageListener('urn:x-cast:com.example.myapp', function(customEvent) {
+            const data = customEvent.data;
+            const type = data.type;
+
+            if (type === 'showPopup') {
+                const text = data.text;
+                const popup = document.getElementById('popup');
+                popup.textContent = text;
+                popup.style.display = 'block';
+            }
+        });
+
+        context.start();
+    </script>
+</body>
+</html>
